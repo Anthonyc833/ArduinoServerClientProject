@@ -24,21 +24,19 @@
 
   // the number of the pushbutton pin
 
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+
 
 const char* ssid = "IOT_2.4G";
 const char* password = "107WirelessNetwork!";
 const char* mqtt_server = "172.20.20.111";
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE	(50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 
-void setup_wifi() {
+/*void setup_wifi() {
 
   delay(10);
   // We start by connecting to a WiFi network
@@ -60,9 +58,9 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-}
+}*/
 
-void callback(char* topic, byte* payload, unsigned int length) {
+/*void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -80,9 +78,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
   }
 
-}
+}*/
 
-void reconnect() {
+/*void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -104,7 +102,7 @@ void reconnect() {
       delay(5000);
     }
   }
-}
+}*/
 
 
 const int ledPin = 2;    // the number of the LED pin
@@ -116,14 +114,14 @@ void setup() {
   pinMode(IRSensor, INPUT);
   pinMode(LED, OUTPUT); 
   Serial.begin(115200);
-  setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  //setup_wifi();
+  //client.setServer(mqtt_server, 1883);
+  //client.setCallback(callback);
 }
 
 void loop() {
 
-    if (!client.connected()) {
+ /*   if (!client.connected()) {
     reconnect();
   }
   client.loop();
@@ -136,14 +134,24 @@ void loop() {
     Serial.print("Publish message: ");
     Serial.println(msg);
     client.publish("outTopic", msg);
-  }
-    int sensorStatus = digitalRead(IRSensor); // Set the GPIO as Input
+  }*/
+   int sensorStatus = digitalRead(IRSensor); // Set the GPIO as Input
     Serial.println(sensorStatus);
-    if(sensorStatus == 0){
+    
+    // if this plays connect to wifi to py that listens for this and plays video
+    String message = Serial.readString(); // read the incoming message
+    Serial.println("Received message: " + message); // 
+   if(sensorStatus == 0){
       Serial.println("JumpScare!");
-      // if this plays connect to wifi to py that listens for this and plays video
+      // plus 1 for every person who has come past this
+    } 
+  if (Serial.available() > 0) { // check if there's any data available on the serial port
+   //print the message to the serial port
+   // sent to dashboard
+  }
+    
 
-    }
+    
 
   
 
